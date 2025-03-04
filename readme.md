@@ -45,3 +45,30 @@ El ESP32 actúa como un puente inteligente entre el IC-705 y la red D-STAR, perm
 ## 📝 Notas
 Este proyecto está en desarrollo, y pueden requerirse ajustes dependiendo de la red y la configuración del IC-705.
 
+## 🛠️ Cómo usar este código
+Modifica WIFI_SSID y WIFI_PASSWORD con los datos de tu red Wi-Fi.
+
+Asigna la IP fija (192.168.0.20) en la configuración de red.
+
+Agrega los reflectores que necesites en reflector_map, usando los nombres que usa el IC-705 en las solicitudes.
+``` python
+reflector_map = {
+    b"XLX015S": "server5.dstar.es",
+    b"REF030C": "ref030.dns.net",
+}
+```
+Sube el código al ESP32 usando un cliente como ampy o rshell.
+
+Ejecuta el script en el ESP32 para que empiece a capturar y reenviar tráfico.
+## 📡 Cómo configurarlo en el IC-705
+Conecta el IC-705 a la red Wi-Fi en la que está el ESP32.
+En la configuración de D-STAR, establece la IP del ESP32 (192.168.0.20) como el reflector.
+Cuando el IC-705 intente conectarse a un reflector, el ESP32 capturará la solicitud y redirigirá el tráfico automáticamente.
+## 🔎 Cómo probar que funciona
+### ✅ Desde una PC, puedes verificar que el ESP32 captura tráfico usando nc (netcat) en Linux o macOS:
+``` bash
+echo -n "XLX314D" | nc -u 192.168.0.20 20001
+```
+Si el ESP32 está funcionando bien, debería imprimir en su salida que ha recibido la solicitud y la ha redirigido.
+
+✅ En el IC-705, intenta conectarte a 192.168.0.20, y el tráfico debe ser redirigido al reflector real.
